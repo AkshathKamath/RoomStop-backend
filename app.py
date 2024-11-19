@@ -1,4 +1,4 @@
-# from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, Request
 import certifi
 import requests
@@ -10,19 +10,19 @@ import json
 
 app = FastAPI()
 
-# origins = [
-#     "http://localhost:3000",  # For local development
-#     "https://your-react-app.com",  # Deployed React app URL
-# ]
+origins = [
+    "http://localhost:3000",  # For local development
+    "https://your-react-app.com",  # Deployed React app URL
+]
 
 # Add CORS middleware
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,
-#     allow_credentials=True,  
-#     allow_methods=["*"],  
-#     allow_headers=["*"],
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,  
+    allow_methods=["*"],  
+    allow_headers=["*"],
+)
 
 uri = "mongodb+srv://rohitprabhu:roomstop123@roomstopcluster.w3zqf.mongodb.net/?retryWrites=true&w=majority&appName=RoomStopCluster"
 db_name = "roomstop"
