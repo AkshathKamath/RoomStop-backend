@@ -13,6 +13,7 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",  # For local development
     "https://your-react-app.com",  # Deployed React app URL
+    "room-stop-frontend.vercel.app"
 ]
 
 # Add CORS middleware
