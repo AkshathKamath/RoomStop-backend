@@ -10,16 +10,11 @@ import json
 
 app = FastAPI()
 
-origins = [
-    "http://localhost:3000",  # For local development
-    "https://your-react-app.com",  # Deployed React app URL
-    "room-stop-frontend.vercel.app"
-]
 
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,  
     allow_methods=["*"],  
     allow_headers=["*"],
