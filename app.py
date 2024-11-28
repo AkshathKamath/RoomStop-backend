@@ -44,6 +44,12 @@ async def list_apartments():
     rooms = db[collection_room]
     return dumps(rooms.find())
 
+@app.get('/rooms/show_shortlisted_apartments')
+async def list_shortlisted_apartments():
+    db = client[db_name]
+    rooms = db[collection_room_users]
+    return dumps(rooms.find())
+
 @app.post('/rooms/shortlistapartments')
 async def shortlist_apartments(house: House = Body(...)):
     db = client[db_name]
