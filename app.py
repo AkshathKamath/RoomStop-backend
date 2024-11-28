@@ -1,5 +1,6 @@
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Body
+from pydantic import BaseModel
 import certifi
 import requests
 import uvicorn
@@ -29,6 +30,9 @@ collection_room_users = 'userrooms'
 # client connection
 client = MongoClient(uri, tlsCAFile=certifi.where())
 
+class House(BaseModel):
+    apartment_id: int
+
 ##Routes
 @app.get('/')
 def home_route():
@@ -41,19 +45,21 @@ async def list_apartments():
     return dumps(rooms.find())
 
 @app.post('/rooms/shortlistapartments')
-async def shortlist_apartments(apartment_id, user_id):
+async def shortlist_apartments(house: House = Body(...)):
     db = client[db_name]
     rooms = db[collection_room]
-    room_shortlist =  json.loads(dumps(rooms.find_one({'Apartment_ID': int(apartment_id)})))
-    room_shortlist.update({'_id': ObjectId(room_shortlist['_id']['$oid']), 'shortlister': int(user_id)})
+    room_shortlist =  json.loads(dumps(rooms.find_one({'Apartment_ID': house.apartment_id})))
+    room_shortlist.update({'_id': ObjectId(room_shortlist['_id']['$oid'])})
     userrooms = db[collection_room_users]
     userrooms.insert_one(room_shortlist)
+    return {"msg":"Room Added Successfully!"}
 
 @app.delete('/rooms/deleteapartment')
-async def delete_apartments(apartment_id, user_id):
+async def delete_apartments(house: House = Body(...)):
     db = client[db_name]
     userrooms = db[collection_room_users]
-    userrooms.find_one_and_delete({'Apartment_ID': int(apartment_id), "shortlister": int(user_id)})
+    userrooms.find_one_and_delete({'Apartment_ID': int(house.apartment_id)})
+    return {"msg":"Room Deleted Successfully!"}
 
 @app.post('/model')
 async def model_route(request: Request):
