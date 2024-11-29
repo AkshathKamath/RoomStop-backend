@@ -64,6 +64,7 @@ async def shortlist_apartments(house: House = Body(...)):
 async def delete_apartments(request: Request):
     body = await request.json()
     apartment_id = body.get("apartment_id")
+    print(apartment_id)
     db = client[db_name]
     userrooms = db[collection_room_users]
     userrooms.find_one_and_delete({'Apartment_ID': apartment_id})
