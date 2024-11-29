@@ -61,11 +61,10 @@ async def shortlist_apartments(house: House = Body(...)):
     return {"msg":"Room Added Successfully!"}
 
 @app.delete('/rooms/deleteapartment')
-async def delete_apartments(request: Request):
-    form_data = await request.json()
+async def delete_apartments(house: House = Body(...)):
     db = client[db_name]
     userrooms = db[collection_room_users]
-    userrooms.find_one_and_delete({'Apartment_ID': form_data.apartment_id})
+    userrooms.find_one_and_delete({'Apartment_ID': house.apartment_id})
     return {"msg":"Room Deleted Successfully!"}
 
 @app.post('/model')
